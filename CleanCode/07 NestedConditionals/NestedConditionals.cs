@@ -6,51 +6,40 @@ namespace CleanCode.NestedConditionals
     {
         public int LoyaltyPoints { get; set; }
     }
-
+    // Yohana Espinoza, James Ordinola
     public class Reservation
     {
+        public DateTime ReservationDate { get; set; }
+        public Customer Customer { get; set; }
+
         public Reservation(Customer customer, DateTime dateTime)
         {
-            From = dateTime;
+            ReservationDate = dateTime;
             Customer = customer;
         }
 
-        public DateTime From { get; set; }
-        public Customer Customer { get; set; }
         public bool IsCanceled { get; set; }
 
-        public void Cancel()
+        public void CancelReservation()
         {
-            // Gold customers can cancel up to 24 hours before
-            if (Customer.LoyaltyPoints > 100)
-            {
-                // If reservation already started throw exception
-                if (DateTime.Now > From)
-                {
-                    throw new InvalidOperationException("It's too late to cancel.");
-                }
-                if ((From - DateTime.Now).TotalHours < 24)
-                {
-                    throw new InvalidOperationException("It's too late to cancel.");
-                }
-                IsCanceled = true;
-            }
-            else
-            {
-                // Regular customers can cancel up to 48 hours before
+            EvaluateReservationTime();
 
-                // If reservation already started throw exception
-                if (DateTime.Now > From)
-                {
-                    throw new InvalidOperationException("It's too late to cancel.");
-                }
-                if ((From - DateTime.Now).TotalHours < 48)
-                {
-                    throw new InvalidOperationException("It's too late to cancel.");
-                }
-                IsCanceled = true;
+            IsCanceled = true;
+        }
+
+        public void EvaluateReservationTime()
+        {
+            var minimumHours = GetMinimumHoursByLoyaltyPoints(Customer.LoyaltyPoints);
+
+            if ((DateTime.Now > ReservationDate) || (ReservationDate - DateTime.Now).TotalHours < minimumHours)
+            {
+                throw new InvalidOperationException("It's too late to cancel.");
             }
         }
 
+        public int GetMinimumHoursByLoyaltyPoints(int loyaltyPoints)
+        {
+            return loyaltyPoints > 100 ? 24 : 48;
+        }
     }
 }
