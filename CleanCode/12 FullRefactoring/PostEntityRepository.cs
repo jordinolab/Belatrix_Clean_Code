@@ -19,10 +19,7 @@ namespace CleanCode._12_FullRefactoring
             _dbContext = new PostEntityDbContext();
         }
 
-        public PostEntity GetPostEntity(int id)
-        {
-            return _dbContext.Posts.SingleOrDefault(p => p.Id == id);
-        }
+        public PostEntity GetPostEntity(int id) => _dbContext.Posts.SingleOrDefault(p => p.Id == id);
 
         public void SaveChanges(PostEntity entity)
         {
