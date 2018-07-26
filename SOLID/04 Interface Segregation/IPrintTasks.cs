@@ -2,7 +2,7 @@
 
 namespace SOLID._04_Interface_Segregation
 {
-    public interface IPrintTasks
+    public interface IHPLaserJetPrintTasks
     {
         bool PrintContent(string content);
         bool ScanContent(string content);
@@ -11,7 +11,14 @@ namespace SOLID._04_Interface_Segregation
         bool PrintDuplexContent(string content);
     }
 
-    public class HPLaserJet : IPrintTasks
+    public interface ICannonMG2470PrintTasks
+    {
+        bool PrintContent(string content);
+        bool ScanContent(string content);
+        bool PhotoCopyContent(string content);
+    }
+
+    public class HPLaserJet : IHPLaserJetPrintTasks
     {
         public bool FaxContent(string content)
         {
@@ -35,7 +42,7 @@ namespace SOLID._04_Interface_Segregation
         }
     }
 
-    public class CannonMG2470 : IPrintTasks
+    public class CannonMG2470 : ICannonMG2470PrintTasks
     {
         public bool PhotoCopyContent(string content)
         {
@@ -48,14 +55,6 @@ namespace SOLID._04_Interface_Segregation
         public bool ScanContent(string content)
         {
             Console.WriteLine("Scan Done"); return true;
-        }
-        public bool PrintDuplexContent(string content)
-        {
-            return false;
-        }
-        public bool FaxContent(string content)
-        {
-            return false;
         }
     }
 }
